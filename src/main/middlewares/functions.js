@@ -22,7 +22,7 @@ function VerifyToken (req, res, next) {
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.username = decoded;
+    req.token = decoded;
   } catch (err) {
     return res.status(401).send("Invalid token");
   }

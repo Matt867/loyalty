@@ -12,7 +12,27 @@ Stamp.init({
     dateTime: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
-    }
+    },
+    score: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    stamperID: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    stampeeID: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    isBusinessStampee: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    },
+    isBusinessStamper: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    },
 }, {sequelize: db})
 
 module.exports = Stamp
