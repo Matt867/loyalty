@@ -1,9 +1,9 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const db = require('../db/db')
 
-class Stamp extends Model {};
+class Review extends Model {};
 
-Stamp.init({
+Review.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -13,18 +13,22 @@ Stamp.init({
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
-    stamperID: {
+    reviewBody: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    businessID: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    stampeeID: {
+    score: {
         type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    validated: {
-        type: DataTypes.BOOLEAN,
         defaultValue: false
     },
+    authorID: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    }
 }, {sequelize: db})
 
-module.exports = Stamp
+module.exports = Review

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-
+const { BusinessAccount, ConsumerAccount, Stamp, Review } = require('../models/index');
 dotenv.config();
 
 function CreateToken (username) {
@@ -41,4 +41,39 @@ function isLoggedIn (token) {
   }
 }
 
-module.exports = { CreateToken, VerifyToken };
+async function ReviewAverage(businessID) {
+  let scoreSum = 0;
+  scores = await Review.findAll({
+    where: {
+      businessID: businessID,
+    },
+    attributes: ['score'],
+  })
+  if (!scores) throw new Error("No scores found");
+  scores.map(obj => scoreSum += obj['score']);
+  return (Math.floor((scoreSum/scores.length)*10) / 10)
+}
+
+async function StampBreakdown(stampeeID, isBusiness) {
+    stamps = await Stamp.findAll({
+      where: {
+        stampeeID: stampeeID,
+      },
+      attributes: ['id', 'dateTime', 'stamperID'],
+    })
+    if (!stamps) throw new Error("No data found");
+    return stamps;
+}
+
+async function ReviewBreakdown(revieweeID) {
+    reviews = await Review.findAll({
+      where: {
+        businessID: revieweeID,
+      },
+      attributes: ['id', 'dateTime', 'reviewBody', 'businessID', 'score'],
+    })
+    if (!reviews) throw new Error("No data found");
+    return reviews;
+}
+
+module.exports = { CreateToken, VerifyToken, ReviewAverage, StampBreakdown, ReviewBreakdown };

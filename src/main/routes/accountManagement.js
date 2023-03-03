@@ -61,7 +61,7 @@ accountManagement.post('/newBusiness', async (req, res) => {
   try {
     const { username, password, businessName } = req.body;
     if (!username || !password || !businessName) {
-      res.status(400).send("No fields can be empty");
+      throw new Error("No fields can be empty")
     }
     salt = await bcrypt.genSalt(SALT_ROUNDS);
     hash = await bcrypt.hash(password, salt);
@@ -75,13 +75,16 @@ accountManagement.post('/newBusiness', async (req, res) => {
       token: CreateToken(req.body.username)
     });  
   } catch (error) {
-    res.sendStatus(500);
+    res.status(400).send(error.message);
   }
 })
 
 accountManagement.post('/newConsumer', async (req, res) => {
   try {
     const { username, password } = req.body;
+    if (!username || !password) {
+      throw new Error("No fields can be empty")
+    }
     salt = await bcrypt.genSalt(SALT_ROUNDS);
     hash = await bcrypt.hash(password, salt);
     newBusiness = await ConsumerAccount.create({
@@ -93,7 +96,7 @@ accountManagement.post('/newConsumer', async (req, res) => {
       token: CreateToken(req.body.username)
     });  
   } catch (error) {
-    res.sendStatus(500);
+    res.sendStatus(400);
   }
 })
 
