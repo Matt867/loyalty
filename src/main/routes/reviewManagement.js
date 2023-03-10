@@ -76,6 +76,20 @@ reviewManagement.put('/body/:reviewID', VerifyToken, async (req, res) => {
   }
 })
 
+reviewManagement.delete('/review/:reviewID', VerifyToken, async (req, res) => {
+  try {
+    const reviewID = req.params.reviewID;
+    const editor = await ConsumerAccount.findOne({where: {username: req.token.username}});
+    const review = await Review.findByPk(reviewID);
+    if (!review || !editor) throw new Error("No review found with that id");
+    if (editor.id !== review.authorID) throw new Error("You do not have permission to delete this review");
+    review.destroy();
+    res.sendStatus(200);
+  } catch (e){
+    res.status(400).send(e.message);
+  }
+})
+
 
 
 module.exports = reviewManagement
